@@ -6,17 +6,20 @@
 #    By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/17 09:41:32 by psaulnie          #+#    #+#              #
-#    Updated: 2022/02/18 13:24:22 by psaulnie         ###   ########.fr        #
+#    Updated: 2022/02/21 12:40:44 by psaulnie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = srcs/main.c srcs/utils.c srcs/init.c
+SRCS = srcs/main.c srcs/utils.c srcs/init.c srcs/routine.c
 OBJS = ${SRCS:.c=.o}
 CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
 CC = gcc
 NAME = philo
 
 .PHONY:	all clean fclean re
+
+%.o:	%.c inc/philosophers.h Makefile
+		${CC} ${CFLAGS} -c $< -o $@
 
 all: ${NAME}
 

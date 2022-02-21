@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 09:43:33 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/18 13:25:55 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/21 15:21:26 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,28 +38,35 @@ typedef struct s_data {
 	struct timeval			start;
 	float					total_time;
 	int						philo_nbr;
-	int						nbr_iter;
-	int						err;
+	int						time_to_eat;
+	int						time_to_sleep;
+	int						time_to_die;
+	int						is_dead;
 }		t_data;
 
 typedef struct s_philosopher
 {
-	t_data		*data;
-	pthread_t	thread_id;
-	int			id;
+	t_data			*data;
+	pthread_t		thread_id;
+	pthread_mutex_t	waiter;
+	int				forks[2];
+	int				id;
+	int				is_eating;
 }		t_philosopher;
 
 /*	INIT.C	*/
 
+void	wait_philo(t_philosopher *philo);
 int		init(t_data *data, char *argv[]);
 
-/*	MAIN.C	*/
+/*	ROUTINE.C	*/
 
-void	*routine(void *philosopher);
+void	*routine(void *current_philosopher);
 
 /*	UTILS.C	*/
 
 int		ft_atoi(const char *str);
 int		get_current_operation_time(t_data data);
+int		get_forks(t_philosopher **philosopher);
 
 #endif
