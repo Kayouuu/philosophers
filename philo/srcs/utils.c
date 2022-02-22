@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 10:01:39 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/21 12:30:43 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/22 16:44:25 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,18 @@ int	get_current_operation_time(t_data data)
 	return (time);
 }
 
+int	get_time(t_data data, int eating_time)
+{
+	struct timeval	current;
+	int				time;
+
+	gettimeofday(&current, NULL);
+	time = ((current.tv_sec * 1000 + current.tv_usec / 1000)
+			- (data.start.tv_sec * 1000 + data.start.tv_usec / 1000)
+			- eating_time);
+	return (time);
+}
+
 int	get_forks(t_philosopher **philosopher)
 {
 	int	i;
@@ -58,19 +70,15 @@ int	get_forks(t_philosopher **philosopher)
 
 	i = 0;
 	id = (*philosopher)->id;
-	(*philosopher)->forks[0] = -1;
+	(*philosopher)->forks[0] = id - 1;
 	(*philosopher)->forks[1] = -1;
 	while (i < (*philosopher)->data->philo_nbr)
 	{
-		if ((*philosopher)->data->forks[i].left_philo == id)
-			(*philosopher)->forks[0] = i;
 		if ((*philosopher)->data->forks[i].right_philo == id)
-			(*philosopher)->forks[1] = i;
+			(*philosopher)->forks[1] = i + 1;
 		i++;
 	}
-	if ((*philosopher)->forks[0] == -1)
-		(*philosopher)->forks[0] = (*philosopher)->forks[1] - 2;
 	if ((*philosopher)->forks[1] == -1)
-		(*philosopher)->forks[1] = (*philosopher)->forks[0] + 2;
+		(*philosopher)->forks[1] = 0;
 	return (1);
 }

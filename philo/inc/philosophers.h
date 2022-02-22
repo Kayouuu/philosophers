@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 09:43:33 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/21 15:21:26 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/22 15:52:54 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_philosopher	t_philosopher;
 typedef struct s_fork
 {
 	pthread_mutex_t	mutex;
+	int				is_locked;
 	int				left_philo;
 	int				right_philo;
 }		t_fork;
@@ -36,7 +37,6 @@ typedef struct s_data {
 	t_fork					*forks;
 	struct s_philosopher	*philo;
 	struct timeval			start;
-	float					total_time;
 	int						philo_nbr;
 	int						time_to_eat;
 	int						time_to_sleep;
@@ -48,10 +48,10 @@ typedef struct s_philosopher
 {
 	t_data			*data;
 	pthread_t		thread_id;
-	pthread_mutex_t	waiter;
 	int				forks[2];
 	int				id;
-	int				is_eating;
+	int				eating_time;
+	int				time_wo_eating;
 }		t_philosopher;
 
 /*	INIT.C	*/
@@ -67,6 +67,7 @@ void	*routine(void *current_philosopher);
 
 int		ft_atoi(const char *str);
 int		get_current_operation_time(t_data data);
+int		get_time(t_data data, int eating_time);
 int		get_forks(t_philosopher **philosopher);
 
 #endif

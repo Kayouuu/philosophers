@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 16:26:11 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/21 15:21:24 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/22 16:52:21 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,28 +48,30 @@ t_philosopher	*init_philo(t_data *data)
 void	init_forks(t_data *data)
 {
 	int	i;
-	int	nbr;
 
 	i = 0;
 	data->forks = malloc(sizeof(t_fork) * (data->philo_nbr + 1));
 	while (i < data->philo_nbr)
 	{
-		nbr = i + 1;
 		pthread_mutex_init(&data->forks[i].mutex, NULL);
-		if (nbr - 1 <= 0)
+		if (i == 0)
 			data->forks[i].left_philo = data->philo_nbr;
 		else
-			data->forks[i].left_philo = nbr - 1;
-		data->forks[i].right_philo = nbr;
+			data->forks[i].left_philo = i;
+		if (i + 1 == data->philo_nbr)
+			data->forks[i].right_philo = 0;
+		else
+			data->forks[i].right_philo = i + 1;
+		data->forks[i].is_locked = 0;
 		i++;
 	}
 }
 
 int	init_times(char *argv[], t_data *data)
 {
-	data->time_to_die = ft_atoi(argv[2]);
-	data->time_to_eat = ft_atoi(argv[3]);
-	data->time_to_sleep = ft_atoi(argv[4]);
+	data->time_to_die = ft_atoi(argv[2]) * 1000;
+	data->time_to_eat = ft_atoi(argv[3]) * 1000;
+	data->time_to_sleep = ft_atoi(argv[4]) * 1000;
 	data->is_dead = 0;
 	if (data->time_to_sleep < 0 || data->time_to_eat < 0
 		|| data->time_to_die < 0)
@@ -88,8 +90,5 @@ int	init(t_data *data, char *argv[])
 	if (data->philo == NULL)
 		return (1);
 	wait_philo(data->philo);
-	printf("%d ms ; Eat : %d ; Sleep : %d ; Die : %d)\n",
-		get_current_operation_time(*data), data->time_to_eat,
-		data->time_to_sleep, data->time_to_die);
 	return (0);
 }
