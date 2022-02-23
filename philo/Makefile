@@ -6,13 +6,13 @@
 #    By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/02/17 09:41:32 by psaulnie          #+#    #+#              #
-#    Updated: 2022/02/23 16:18:36 by psaulnie         ###   ########.fr        #
+#    Updated: 2022/02/23 17:04:00 by psaulnie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = srcs/main.c srcs/utils.c srcs/init.c srcs/routine.c srcs/logs.c
 OBJS = ${SRCS:.c=.o}
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror
 CC = gcc
 NAME = philo
 
