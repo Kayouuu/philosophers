@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 10:01:39 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/22 16:44:25 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/23 16:54:07 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,18 @@ int	get_forks(t_philosopher **philosopher)
 	}
 	if ((*philosopher)->forks[1] == -1)
 		(*philosopher)->forks[1] = 0;
+	return (1);
+}
+
+int	msleep(int time)
+{
+	int	i;
+
+	i = 0;
+	while (i < time)
+	{
+		usleep(50);
+		i += 50;
+	}
 	return (1);
 }

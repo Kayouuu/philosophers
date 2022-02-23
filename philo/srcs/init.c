@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 16:26:11 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/22 16:52:21 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/23 16:32:45 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	init_times(char *argv[], t_data *data)
 	data->time_to_eat = ft_atoi(argv[3]) * 1000;
 	data->time_to_sleep = ft_atoi(argv[4]) * 1000;
 	data->is_dead = 0;
+	data->can_write_death = 1;
 	if (data->time_to_sleep < 0 || data->time_to_eat < 0
 		|| data->time_to_die < 0)
 		return (0);
@@ -85,7 +86,6 @@ int	init(t_data *data, char *argv[])
 	if (init_times(argv, data) == 0)
 		return (1);
 	init_forks(data);
-	gettimeofday(&data->start, NULL);
 	data->philo = init_philo(data);
 	if (data->philo == NULL)
 		return (1);
