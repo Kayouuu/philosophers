@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 10:01:39 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/23 17:25:59 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/24 12:01:11 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ int	msleep(int time)
 	i = 0;
 	while (i < time)
 	{
-		usleep(time / 1000);
-		i += time / 1000;
+		usleep(100000);
+		i += 100000;
 	}
 	return (1);
 }
