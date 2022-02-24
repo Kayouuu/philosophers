@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:51:16 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/24 14:19:00 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/24 18:08:18 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,14 @@ int	dying(t_philosopher philosopher, t_data *data)
 
 int	action_eat(t_philosopher *philosopher, t_data *data)
 {
-	// if (philosopher->time_wo_eating != 0)
-	// 	philosopher->eating_time = get_current_operation_time(*data)
-	// 		+ (data->time_to_sleep / 1000);
-	// printf("[%d] %d\n", philosopher->id, philosopher->eating_time);
-	while (dying(*philosopher, data) == 0
-		&& is_forks_locked(*philosopher, *data) == 1
+	if (philosopher->time_wo_eating != 0)
+		philosopher->eating_time = (data->time_to_sleep / 1000);
+	while (is_forks_locked(*philosopher, *data) == 1
+		&& dying(*philosopher, data) == 0
 		&& data->is_dead == 0)
 		philosopher->time_wo_eating = get_time(*data,
 				philosopher->eating_time);
+	printf("[%d] %d\n", philosopher->id, philosopher->time_wo_eating);
 	if (data->is_dead == 1)
 		return (0);
 	data->forks[philosopher->forks[0]].is_locked = 1;
@@ -74,7 +73,7 @@ int	action_sleep(t_philosopher *philosopher, t_data *data)
 	pthread_mutex_unlock(&data->forks[philosopher->forks[1]].mutex);
 	data->forks[philosopher->forks[0]].is_locked = 0;
 	data->forks[philosopher->forks[1]].is_locked = 0;
-	philosopher->eating_time = get_current_operation_time(*data);
+	// philosopher->eating_time = get_current_operation_time(*data);
 	msleep(data->time_to_sleep);
 	if (data->is_dead == 1)
 		return (0);
@@ -96,8 +95,8 @@ void	*routine(void *current_philosopher)
 	get_forks(&philosopher);
 	philosopher->eating_time = get_current_operation_time(*data);
 	philosopher->time_wo_eating = 0;
-	if (philosopher->id % 2 == 0)
-		usleep(10);
+	// if (philosopher->id % 2 == 0)
+	// 	usleep(10);
 	while (data->is_dead == 0)
 	{
 		action_eat(philosopher, data);
