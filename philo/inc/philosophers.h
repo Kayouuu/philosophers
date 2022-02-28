@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 09:43:33 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/28 09:29:23 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/28 14:36:24 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ typedef struct s_data {
 	struct timeval			start;
 	int						philo_nbr;
 	int						iteration;
-	int						time_to_eat;
-	int						time_to_sleep;
-	int						time_to_die;
+	useconds_t				time_to_eat;
+	useconds_t				time_to_sleep;
+	useconds_t				time_to_die;
 	int						is_dead;
 	int						can_write_death;
 	int						is_threads_created;
@@ -54,13 +54,24 @@ typedef struct s_philosopher
 	pthread_t		thread_id;
 	int				forks[2];
 	int				id;
+	int				iteration;
 	int				eating_time;
 	int				time_wo_eating;
 }		t_philosopher;
 
+/*	ACTIONS.C		*/
+
+int		action_eat(t_philosopher *philosopher, t_data *data);
+int		action_sleep(t_philosopher *philosopher, t_data *data);
+
+/*	CLEAN_EXIT.C	*/
+
+int		print_and_return(void);
+void	clean(t_data *data);
+
 /*	INIT.C	*/
 
-void	wait_philo(t_philosopher *philo);
+int		wait_philo(t_philosopher *philo);
 int		init(t_data *data, int argc, char *argv[]);
 
 /*	LOGS.C	*/
@@ -72,6 +83,8 @@ int		print_thinking(t_data *data, int operation_time, int id);
 
 /*	ROUTINE.C	*/
 
+int		is_forks_locked(t_philosopher philosopher, t_data data);
+int		dying(t_philosopher philosopher, t_data *data);
 void	*routine(void *current_philosopher);
 
 /*	UTILS.C	*/
