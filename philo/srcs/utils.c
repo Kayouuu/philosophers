@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 10:01:39 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/24 12:01:11 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/28 09:15:48 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ int	get_time(t_data data, int eating_time)
 
 	gettimeofday(&current, NULL);
 	time = ((current.tv_sec * 1000 + current.tv_usec / 1000)
-			- (data.start.tv_sec * 1000 + data.start.tv_usec / 1000)
-			- eating_time);
+			- (data.start.tv_sec * 1000 + data.start.tv_usec / 1000));
+	time -= eating_time;
 	return (time);
 }
 
@@ -90,7 +90,7 @@ int	msleep(int time)
 	i = 0;
 	while (i < time)
 	{
-		usleep(100000);
+		usleep(100000 - 4000);
 		i += 100000;
 	}
 	return (1);

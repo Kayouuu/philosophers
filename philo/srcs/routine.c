@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:51:16 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/24 18:08:18 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/28 09:52:57 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,23 @@ int	dying(t_philosopher philosopher, t_data *data)
 
 int	action_eat(t_philosopher *philosopher, t_data *data)
 {
-	if (philosopher->time_wo_eating != 0)
-		philosopher->eating_time = (data->time_to_sleep / 1000);
+	if (philosopher->time_wo_eating == -1)
+		philosopher->eating_time = get_current_operation_time(*data);
+	else
+		philosopher->eating_time = get_current_operation_time(*data)
+			- (data->time_to_sleep / 1000) - (data->time_to_eat / 1000);
 	while (is_forks_locked(*philosopher, *data) == 1
 		&& dying(*philosopher, data) == 0
 		&& data->is_dead == 0)
 		philosopher->time_wo_eating = get_time(*data,
 				philosopher->eating_time);
-	printf("[%d] %d\n", philosopher->id, philosopher->time_wo_eating);
+	// printf("[%d] %d - %d\n", philosopher->id, philosopher->time_wo_eating, philosopher->eating_time);
 	if (data->is_dead == 1)
 		return (0);
 	data->forks[philosopher->forks[0]].is_locked = 1;
 	data->forks[philosopher->forks[1]].is_locked = 1;
 	pthread_mutex_lock(&data->forks[philosopher->forks[0]].mutex);
+	pthread_mutex_lock(&data->forks[philosopher->forks[1]].mutex);
 	print_take(data, get_current_operation_time(*data), philosopher->id);
 	print_take(data, get_current_operation_time(*data), philosopher->id);
 	if (data->is_dead == 1)
@@ -84,6 +88,7 @@ void	*routine(void *current_philosopher)
 {
 	t_philosopher	*philosopher;
 	t_data			*data;
+	int				i;
 
 	philosopher = current_philosopher;
 	data = philosopher->data;
@@ -91,18 +96,20 @@ void	*routine(void *current_philosopher)
 		data->is_threads_created = 1;
 	while (data->is_threads_created == 0)
 		continue ;
-	gettimeofday(&data->start, NULL);
 	get_forks(&philosopher);
 	philosopher->eating_time = get_current_operation_time(*data);
-	philosopher->time_wo_eating = 0;
-	// if (philosopher->id % 2 == 0)
-	// 	usleep(10);
+	philosopher->time_wo_eating = -1;
+	gettimeofday(&data->start, NULL);
+	i = 0;
 	while (data->is_dead == 0)
 	{
+		// if (philosopher->id % 2 == 0)
+		// 	usleep(10);
 		action_eat(philosopher, data);
 		action_sleep(philosopher, data);
 		print_thinking(data,
 			get_current_operation_time(*data), philosopher->id);
+		i++;
 	}
 	return ((void *) 1);
 }

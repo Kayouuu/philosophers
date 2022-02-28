@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 09:43:33 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/23 17:03:31 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/28 09:29:23 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_data {
 	struct s_philosopher	*philo;
 	struct timeval			start;
 	int						philo_nbr;
+	int						iteration;
 	int						time_to_eat;
 	int						time_to_sleep;
 	int						time_to_die;
@@ -60,7 +61,7 @@ typedef struct s_philosopher
 /*	INIT.C	*/
 
 void	wait_philo(t_philosopher *philo);
-int		init(t_data *data, char *argv[]);
+int		init(t_data *data, int argc, char *argv[]);
 
 /*	LOGS.C	*/
 

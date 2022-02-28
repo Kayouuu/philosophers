@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 09:51:33 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/24 17:49:57 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/02/28 09:27:56 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int argc, char *argv[])
 		write(2, "Error\n", 7);
 		return (EXIT_FAILURE);
 	}
-	error = init(&data, argv);
+	error = init(&data, argc, argv);
 	if (error == 1)
 	{
 		write(2, "Error\n", 7);
