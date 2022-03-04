@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 10:01:39 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/28 15:06:47 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/04 12:18:24 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,30 @@ int	get_forks(t_philosopher **philosopher)
 
 int	msleep(int time)
 {
-	int	i;
+	int				i;
+	int				j;
+	struct timeval	current;
 
-	i = 0;
-	while (i < time)
+	gettimeofday(&current, NULL);
+	j = ((current.tv_sec * 1000 + current.tv_usec / 1000));
+	usleep(time * 0.95);
+	i = (time - (time * 0.95));
+	// printf("%d\n", get_current_operation_time(*data));
+	printf("%d - %d\n", j, current);
+	while (j <= time / 1000)
 	{
-		usleep(100000 - 3000);
-		i += 100000;
+		gettimeofday(&current, NULL);
+		j = ((current.tv_sec * 1000 + current.tv_usec / 1000));
+		usleep(200);
 	}
 	return (1);
+	// int	i;
+
+	// i = 0;
+	// while (i < time)
+	// {
+	// 	usleep(100000 - 3000);
+	// 	i += 100000;
+	// }
+	// return (1);
 }
