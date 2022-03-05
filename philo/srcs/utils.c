@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 10:01:39 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/04 12:18:24 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/05 11:47:40 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	get_time(t_data data, int eating_time)
 	return (time);
 }
 
-int	get_forks(t_philosopher **philosopher)
+int	get_forks(t_philo **philosopher)
 {
 	int	i;
 	int	id;
@@ -85,30 +85,23 @@ int	get_forks(t_philosopher **philosopher)
 
 int	msleep(int time)
 {
-	int				i;
-	int				j;
+	int				start_time;
+	int				current_time;
+	struct timeval	start;
 	struct timeval	current;
 
-	gettimeofday(&current, NULL);
-	j = ((current.tv_sec * 1000 + current.tv_usec / 1000));
+	gettimeofday(&start, NULL);
+	start_time = ((current.tv_sec * 1000 + current.tv_usec / 1000));
 	usleep(time * 0.95);
-	i = (time - (time * 0.95));
-	// printf("%d\n", get_current_operation_time(*data));
-	printf("%d - %d\n", j, current);
-	while (j <= time / 1000)
+	gettimeofday(&current, NULL);
+	current_time = ((current.tv_sec * 1000 + current.tv_usec / 1000)
+			- (start.tv_sec * 1000 + start.tv_usec / 1000));
+	while (current_time < time / 1000)
 	{
 		gettimeofday(&current, NULL);
-		j = ((current.tv_sec * 1000 + current.tv_usec / 1000));
+		current_time = ((current.tv_sec * 1000 + current.tv_usec / 1000)
+				- (start.tv_sec * 1000 + start.tv_usec / 1000));
 		usleep(200);
 	}
 	return (1);
-	// int	i;
-
-	// i = 0;
-	// while (i < time)
-	// {
-	// 	usleep(100000 - 3000);
-	// 	i += 100000;
-	// }
-	// return (1);
 }

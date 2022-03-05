@@ -6,30 +6,41 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:51:16 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/28 15:07:39 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/05 11:56:03 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philosophers.h"
 
-int	is_forks_locked(t_philosopher philosopher, t_data data)
+int	is_forks_locked(t_philo philosopher, t_data *data)
 {
-	if (data.forks[philosopher.forks[0]].is_locked == 0
-		&& data.forks[philosopher.forks[1]].is_locked == 0
-		&& data.philo_nbr != 1)
+	int	result;
+
+	if (pthread_mutex_lock(&data->is_locked) != 0)
 		return (0);
+	if (data->forks[philosopher.forks[0]].is_locked == 0
+		&& data->forks[philosopher.forks[1]].is_locked == 0
+		&& data->philo_nbr != 1)
+		result = 0;
 	else
-		return (1);
+		result = 1;
+	pthread_mutex_unlock(&data->is_locked);
+	return (result);
 }
 
-int	dying(t_philosopher philosopher, t_data *data)
+int	dying(t_philo philosopher, t_data *data)
 {
 	if (philosopher.time_wo_eating
 		>= (int)(data->time_to_die / 1000))
 	{
+		pthread_mutex_lock(&data->dead);
 		if (data->is_dead == 1)
+		{
+			pthread_mutex_unlock(&data->dead);
 			return (1);
+		}
 		data->is_dead = 1;
+		pthread_mutex_unlock(&data->dead);
 		pthread_mutex_lock(&data->can_write);
 		if (data->can_write_death == 0)
 			return (1);
@@ -42,27 +53,39 @@ int	dying(t_philosopher philosopher, t_data *data)
 	return (0);
 }
 
-static void	init_routine(t_philosopher *philosopher, t_data *data)
+static int	init_routine(t_philo *philosopher, t_data *data)
 {
 	if (philosopher->id == data->philo_nbr - 1)
+	{
+		pthread_mutex_lock(&data->are_threads_created);
 		data->is_threads_created = 1;
-	while (data->is_threads_created == 0 && data->philo_nbr != 1)
-		continue ;
+		pthread_mutex_unlock(&data->are_threads_created);
+	}
+	while (data->philo_nbr != 1)
+	{
+		pthread_mutex_lock(&data->are_threads_created);
+		if (data->is_threads_created == 0 || data->philo_nbr != 1)
+			break ;
+		pthread_mutex_unlock(&data->are_threads_created);
+	}
+	pthread_mutex_unlock(&data->are_threads_created);
 	philosopher->iteration = data->iteration;
 	get_forks(&philosopher);
 	philosopher->time_wo_eating = -1;
 	gettimeofday(&data->start, NULL);
+	return (1);
 }
 
-void	*routine(void *current_philosopher)
+void	*routine(void *current_philo)
 {
-	t_philosopher	*philosopher;
+	t_philo			*philosopher;
 	t_data			*data;
 	int				i;
 
-	philosopher = current_philosopher;
+	philosopher = current_philo;
 	data = philosopher->data;
-	init_routine(philosopher, data);
+	if (init_routine(philosopher, data) == 0)
+		return (0);
 	i = 0;
 	while (data->is_dead == 0 && i++ != philosopher->iteration)
 	{
@@ -72,9 +95,17 @@ void	*routine(void *current_philosopher)
 			write(2, "Error\n", 7);
 			return ((void *) 0);
 		}
+		pthread_mutex_lock(&data->dead);
+		if (data->is_dead == 1)
+		{
+			pthread_mutex_unlock(&data->dead);
+			break ;
+		}
+		pthread_mutex_unlock(&data->dead);
 		print_thinking(data,
 			get_current_operation_time(*data), philosopher->id);
 		usleep(100);
 	}
+	destroy_mutex(data);
 	return ((void *) 1);
 }

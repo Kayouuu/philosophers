@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 09:43:33 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/04 12:17:53 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/05 11:55:04 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 /*	STRUCTS	*/
 
-typedef struct s_philosopher	t_philosopher;
+typedef struct s_philosopher	t_philo;
 
 typedef struct s_fork
 {
@@ -36,6 +36,9 @@ typedef struct s_fork
 typedef struct s_data {
 	t_fork					*forks;
 	pthread_mutex_t			can_write;
+	pthread_mutex_t			is_locked;
+	pthread_mutex_t			are_threads_created;
+	pthread_mutex_t			dead;
 	struct s_philosopher	*philo;
 	struct timeval			start;
 	int						philo_nbr;
@@ -57,12 +60,12 @@ typedef struct s_philosopher
 	int				iteration;
 	int				eating_time;
 	int				time_wo_eating;
-}		t_philosopher;
+}		t_philo;
 
 /*	ACTIONS.C		*/
 
-int		action_eat(t_philosopher *philosopher, t_data *data);
-int		action_sleep(t_philosopher *philosopher, t_data *data);
+int		action_eat(t_philo *philosopher, t_data *data);
+int		action_sleep(t_philo *philosopher, t_data *data);
 
 /*	CLEAN_EXIT.C	*/
 
@@ -71,28 +74,32 @@ void	clean(t_data *data);
 
 /*	INIT.C	*/
 
-int		wait_philo(t_philosopher *philo);
+int		wait_philo(t_philo *philo);
 int		init(t_data *data, int argc, char *argv[]);
 
 /*	LOGS.C	*/
 
-int		print_take(t_data *data, int operation_time, int id);
-int		print_eat(t_data *data, int operation_time, int id);
+int		print_take(t_data *data, int operation_time, int id, t_philo *philo);
+int		print_eat(t_data *data, int operation_time, int id, t_philo *philo);
 int		print_sleep(t_data *data, int operation_time, int id);
 int		print_thinking(t_data *data, int operation_time, int id);
 
+/*	MAIN.C		*/
+
+int		destroy_mutex(t_data *data);
+
 /*	ROUTINE.C	*/
 
-int		is_forks_locked(t_philosopher philosopher, t_data data);
-int		dying(t_philosopher philosopher, t_data *data);
-void	*routine(void *current_philosopher);
+int		is_forks_locked(t_philo philosopher, t_data *data);
+int		dying(t_philo philosopher, t_data *data);
+void	*routine(void *current_philo);
 
 /*	UTILS.C	*/
 
 int		ft_atoi(const char *str);
 int		get_current_operation_time(t_data data);
 int		get_time(t_data data, int eating_time);
-int		get_forks(t_philosopher **philosopher);
+int		get_forks(t_philo **philosopher);
 int		msleep(int time);
 
 #endif

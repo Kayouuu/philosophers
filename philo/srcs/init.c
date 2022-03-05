@@ -6,13 +6,13 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 16:26:11 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/02/28 14:47:34 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/05 11:47:40 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philosophers.h"
 
-int	wait_philo(t_philosopher *philo)
+int	wait_philo(t_philo *philo)
 {
 	int	i;
 
@@ -26,15 +26,15 @@ int	wait_philo(t_philosopher *philo)
 	return (1);
 }
 
-t_philosopher	*init_philo(t_data *data)
+t_philo	*init_philo(t_data *data)
 {
-	t_philosopher	*philo;
+	t_philo	*philo;
 	int				nbr;
 
 	nbr = 0;
 	if (data->philo_nbr > 200)
 		return (NULL);
-	philo = malloc(sizeof(t_philosopher) * (data->philo_nbr + 1));
+	philo = malloc(sizeof(t_philo) * (data->philo_nbr + 1));
 	if (!philo)
 		return (NULL);
 	while (nbr < data->philo_nbr)
@@ -71,6 +71,12 @@ int	init_forks(t_data *data)
 		data->forks[i].is_locked = 0;
 		i++;
 	}
+	data->forks[i].left_philo = -1;
+	if (pthread_mutex_init(&data->can_write, NULL) != 0
+		|| pthread_mutex_init(&data->are_threads_created, NULL) != 0
+		|| pthread_mutex_init(&data->is_locked, NULL) != 0
+		|| pthread_mutex_init(&data->dead, NULL) != 0)
+		return (0);
 	return (1);
 }
 
