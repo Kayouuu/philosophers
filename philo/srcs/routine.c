@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:51:16 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/05 11:56:03 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/07 13:38:13 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,14 @@ int	dying(t_philo philosopher, t_data *data)
 		pthread_mutex_unlock(&data->dead);
 		pthread_mutex_lock(&data->can_write);
 		if (data->can_write_death == 0)
+		{
+			pthread_mutex_unlock(&data->can_write);
 			return (1);
+		}
 		data->can_write_death = 0;
-		pthread_mutex_unlock(&data->can_write);
 		printf("%d %d died\n",
 			get_current_operation_time(*data), philosopher.id);
+		pthread_mutex_unlock(&data->can_write);
 		return (1);
 	}
 	return (0);
@@ -57,6 +60,7 @@ static int	init_routine(t_philo *philosopher, t_data *data)
 {
 	if (philosopher->id == data->philo_nbr - 1)
 	{
+		gettimeofday(&data->start, NULL);
 		pthread_mutex_lock(&data->are_threads_created);
 		data->is_threads_created = 1;
 		pthread_mutex_unlock(&data->are_threads_created);
@@ -64,7 +68,7 @@ static int	init_routine(t_philo *philosopher, t_data *data)
 	while (data->philo_nbr != 1)
 	{
 		pthread_mutex_lock(&data->are_threads_created);
-		if (data->is_threads_created == 0 || data->philo_nbr != 1)
+		if (data->is_threads_created == 1 || data->philo_nbr == 1)
 			break ;
 		pthread_mutex_unlock(&data->are_threads_created);
 	}
@@ -72,29 +76,24 @@ static int	init_routine(t_philo *philosopher, t_data *data)
 	philosopher->iteration = data->iteration;
 	get_forks(&philosopher);
 	philosopher->time_wo_eating = -1;
-	gettimeofday(&data->start, NULL);
+	if (data->philo_nbr == 1)
+		gettimeofday(&data->start, NULL);
 	return (1);
 }
 
 void	*routine(void *current_philo)
 {
-	t_philo			*philosopher;
+	t_philo			*philo;
 	t_data			*data;
 	int				i;
 
-	philosopher = current_philo;
-	data = philosopher->data;
-	if (init_routine(philosopher, data) == 0)
+	philo = current_philo;
+	data = philo->data;
+	if (init_routine(philo, data) == 0)
 		return (0);
 	i = 0;
-	while (data->is_dead == 0 && i++ != philosopher->iteration)
+	while (i++ != philo->iteration)
 	{
-		if (action_eat(philosopher, data) == 0
-			|| action_sleep(philosopher, data) == 0)
-		{
-			write(2, "Error\n", 7);
-			return ((void *) 0);
-		}
 		pthread_mutex_lock(&data->dead);
 		if (data->is_dead == 1)
 		{
@@ -102,8 +101,9 @@ void	*routine(void *current_philo)
 			break ;
 		}
 		pthread_mutex_unlock(&data->dead);
-		print_thinking(data,
-			get_current_operation_time(*data), philosopher->id);
+		if (action_eat(philo, data) == 0 || action_sleep(philo, data) == 0)
+			return ((void *)(write(2, "Error\n", 7) * 0));
+		print_thinking(data, get_current_operation_time(*data), philo->id);
 		usleep(100);
 	}
 	destroy_mutex(data);

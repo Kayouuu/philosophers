@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 10:01:39 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/05 11:47:40 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/07 11:27:01 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,17 +91,17 @@ int	msleep(int time)
 	struct timeval	current;
 
 	gettimeofday(&start, NULL);
-	start_time = ((current.tv_sec * 1000 + current.tv_usec / 1000));
+	start_time = (start.tv_sec * 1000 + start.tv_usec / 1000);
 	usleep(time * 0.95);
 	gettimeofday(&current, NULL);
 	current_time = ((current.tv_sec * 1000 + current.tv_usec / 1000)
-			- (start.tv_sec * 1000 + start.tv_usec / 1000));
-	while (current_time < time / 1000)
+			- start_time);
+	while (current_time * 1000 < time)
 	{
+		usleep(10);
 		gettimeofday(&current, NULL);
 		current_time = ((current.tv_sec * 1000 + current.tv_usec / 1000)
-				- (start.tv_sec * 1000 + start.tv_usec / 1000));
-		usleep(200);
+				- start_time);
 	}
 	return (1);
 }

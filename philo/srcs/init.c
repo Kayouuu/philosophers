@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 16:26:11 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/05 11:47:40 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/07 12:04:25 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	wait_philo(t_philo *philo)
 
 t_philo	*init_philo(t_data *data)
 {
-	t_philo	*philo;
+	t_philo			*philo;
 	int				nbr;
 
 	nbr = 0;
@@ -58,8 +58,7 @@ int	init_forks(t_data *data)
 	data->forks = malloc(sizeof(t_fork) * (data->philo_nbr + 1));
 	while (i < data->philo_nbr)
 	{
-		if (pthread_mutex_init(&data->forks[i].mutex, NULL) != 0)
-			return (0);
+		pthread_mutex_init(&data->forks[i].mutex, NULL);
 		if (i == 0)
 			data->forks[i].left_philo = data->philo_nbr;
 		else
@@ -108,21 +107,12 @@ int	init(t_data *data, int argc, char *argv[])
 {
 	data->philo_nbr = ft_atoi(argv[1]);
 	if (init_times(argc, argv, data) == 0)
-	{
-		printf("c\n");
 		return (1);
-	}
 	if (init_forks(data) == 0)
-	{
-		printf("b\n");
 		return (1);
-	}
 	data->philo = init_philo(data);
 	if (data->philo == NULL)
-	{
-		printf("a\n");
 		return (1);
-	}
 	if (wait_philo(data->philo) == 0)
 		return (1);
 	clean(data);

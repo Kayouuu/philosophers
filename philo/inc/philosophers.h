@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 09:43:33 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/05 11:55:04 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/07 13:15:06 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ typedef struct s_philosopher
 
 /*	ACTIONS.C		*/
 
-int		action_eat(t_philo *philosopher, t_data *data);
-int		action_sleep(t_philo *philosopher, t_data *data);
+int		action_eat(t_philo *philo, t_data *data);
+int		action_sleep(t_philo *philo, t_data *data);
 
 /*	CLEAN_EXIT.C	*/
 
@@ -81,7 +81,7 @@ int		init(t_data *data, int argc, char *argv[]);
 
 int		print_take(t_data *data, int operation_time, int id, t_philo *philo);
 int		print_eat(t_data *data, int operation_time, int id, t_philo *philo);
-int		print_sleep(t_data *data, int operation_time, int id);
+int		print_sleep(t_data *data, int operation_time, int id, t_philo *philo);
 int		print_thinking(t_data *data, int operation_time, int id);
 
 /*	MAIN.C		*/

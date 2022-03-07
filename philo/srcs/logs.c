@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/23 16:00:31 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/05 11:58:47 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/07 13:14:59 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,15 @@ int	print_eat(t_data *data, int operation_time, int id, t_philo *philo)
 	return (1);
 }
 
-int	print_sleep(t_data *data, int operation_time, int id)
+int	print_sleep(t_data *data, int operation_time, int id, t_philo *philo)
 {
 	pthread_mutex_lock(&data->can_write);
 	pthread_mutex_lock(&data->dead);
 	if (data->is_dead == 1 || data->can_write_death == 0)
 	{
 		pthread_mutex_unlock(&data->dead);
+		pthread_mutex_unlock(&data->forks[philo->forks[0]].mutex);
+		pthread_mutex_unlock(&data->forks[philo->forks[1]].mutex);
 		pthread_mutex_unlock(&data->can_write);
 		return (0);
 	}
@@ -70,6 +72,7 @@ int	print_thinking(t_data *data, int operation_time, int id)
 	pthread_mutex_lock(&data->dead);
 	if (data->is_dead == 1 || data->can_write_death == 0)
 	{
+		pthread_mutex_unlock(&data->dead);
 		pthread_mutex_unlock(&data->can_write);
 		return (0);
 	}
