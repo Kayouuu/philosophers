@@ -6,13 +6,13 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 16:26:11 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/07 12:04:25 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/08 11:44:00 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philosophers.h"
 
-int	wait_philo(t_philo *philo)
+int	wait_philo(t_philo *philo, t_data *data)
 {
 	int	i;
 
@@ -23,6 +23,7 @@ int	wait_philo(t_philo *philo)
 			return (0);
 		i++;
 	}
+	destroy_mutex(data);
 	return (1);
 }
 
@@ -113,7 +114,7 @@ int	init(t_data *data, int argc, char *argv[])
 	data->philo = init_philo(data);
 	if (data->philo == NULL)
 		return (1);
-	if (wait_philo(data->philo) == 0)
+	if (wait_philo(data->philo, data) == 0)
 		return (1);
 	clean(data);
 	return (0);

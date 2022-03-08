@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:51:16 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/07 13:38:13 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/08 11:44:30 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,5 @@ void	*routine(void *current_philo)
 		print_thinking(data, get_current_operation_time(*data), philo->id);
 		usleep(100);
 	}
-	destroy_mutex(data);
 	return ((void *) 1);
 }
