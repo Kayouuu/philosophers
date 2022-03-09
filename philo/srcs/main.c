@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 09:51:33 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/08 11:43:30 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/09 10:37:42 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int	destroy_mutex(t_data *data)
 
 	pthread_mutex_destroy(&data->are_threads_created);
 	pthread_mutex_destroy(&data->can_write);
-	pthread_mutex_destroy(&data->is_locked);
 	i = 0;
 	while (data->forks[i].left_philo != -1)
 	{

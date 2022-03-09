@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 16:26:11 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/08 11:44:00 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/09 10:37:20 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,11 @@ int	init_forks(t_data *data)
 			data->forks[i].right_philo = 0;
 		else
 			data->forks[i].right_philo = i + 1;
-		data->forks[i].is_locked = 0;
 		i++;
 	}
 	data->forks[i].left_philo = -1;
 	if (pthread_mutex_init(&data->can_write, NULL) != 0
 		|| pthread_mutex_init(&data->are_threads_created, NULL) != 0
-		|| pthread_mutex_init(&data->is_locked, NULL) != 0
 		|| pthread_mutex_init(&data->dead, NULL) != 0)
 		return (0);
 	return (1);

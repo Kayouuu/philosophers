@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 10:01:39 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/07 11:27:01 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/09 09:43:46 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	msleep(int time)
 			- start_time);
 	while (current_time * 1000 < time)
 	{
-		usleep(10);
+		usleep(1);
 		gettimeofday(&current, NULL);
 		current_time = ((current.tv_sec * 1000 + current.tv_usec / 1000)
 				- start_time);

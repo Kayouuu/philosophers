@@ -6,27 +6,11 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:51:16 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/08 11:44:30 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/09 10:24:23 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/philosophers.h"
-
-int	is_forks_locked(t_philo philosopher, t_data *data)
-{
-	int	result;
-
-	if (pthread_mutex_lock(&data->is_locked) != 0)
-		return (0);
-	if (data->forks[philosopher.forks[0]].is_locked == 0
-		&& data->forks[philosopher.forks[1]].is_locked == 0
-		&& data->philo_nbr != 1)
-		result = 0;
-	else
-		result = 1;
-	pthread_mutex_unlock(&data->is_locked);
-	return (result);
-}
 
 int	dying(t_philo philosopher, t_data *data)
 {
@@ -58,7 +42,7 @@ int	dying(t_philo philosopher, t_data *data)
 
 static int	init_routine(t_philo *philosopher, t_data *data)
 {
-	if (philosopher->id == data->philo_nbr - 1)
+	if (philosopher->id == data->philo_nbr)
 	{
 		gettimeofday(&data->start, NULL);
 		pthread_mutex_lock(&data->are_threads_created);
@@ -78,6 +62,8 @@ static int	init_routine(t_philo *philosopher, t_data *data)
 	philosopher->time_wo_eating = -1;
 	if (data->philo_nbr == 1)
 		gettimeofday(&data->start, NULL);
+	if (philosopher->id % 2)
+		msleep(1000);
 	return (1);
 }
 
@@ -104,7 +90,6 @@ void	*routine(void *current_philo)
 		if (action_eat(philo, data) == 0 || action_sleep(philo, data) == 0)
 			return ((void *)(write(2, "Error\n", 7) * 0));
 		print_thinking(data, get_current_operation_time(*data), philo->id);
-		usleep(100);
 	}
 	return ((void *) 1);
 }

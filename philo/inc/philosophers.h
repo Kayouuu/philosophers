@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 09:43:33 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/08 11:44:15 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/09 10:37:46 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ typedef struct s_philosopher	t_philo;
 typedef struct s_fork
 {
 	pthread_mutex_t	mutex;
-	int				is_locked;
 	int				left_philo;
 	int				right_philo;
 }		t_fork;
@@ -36,7 +35,6 @@ typedef struct s_fork
 typedef struct s_data {
 	t_fork					*forks;
 	pthread_mutex_t			can_write;
-	pthread_mutex_t			is_locked;
 	pthread_mutex_t			are_threads_created;
 	pthread_mutex_t			dead;
 	struct s_philosopher	*philo;
