@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/21 09:51:16 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/09 10:24:23 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/10 09:49:38 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	init_routine(t_philo *philosopher, t_data *data)
 	if (data->philo_nbr == 1)
 		gettimeofday(&data->start, NULL);
 	if (philosopher->id % 2)
-		msleep(1000);
+		msleep(100 * data->philo_nbr);
 	return (1);
 }
 

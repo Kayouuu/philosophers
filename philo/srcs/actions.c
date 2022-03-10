@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/28 14:29:03 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/09 10:37:36 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/10 09:49:46 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	action_eat(t_philo *philo, t_data *data)
 	if (data->is_dead == 1)
 	{
 		pthread_mutex_unlock(&data->dead);
-		return (0);
+		return (1);
 	}
 	pthread_mutex_unlock(&data->dead);
 	if (action_eat2(philo, data) == 1)
