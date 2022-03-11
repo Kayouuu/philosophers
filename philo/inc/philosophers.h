@@ -6,7 +6,7 @@
 /*   By: psaulnie <psaulnie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/17 09:43:33 by psaulnie          #+#    #+#             */
-/*   Updated: 2022/03/09 10:37:46 by psaulnie         ###   ########.fr       */
+/*   Updated: 2022/03/11 15:51:03 by psaulnie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_philosopher
 {
 	t_data			*data;
 	pthread_t		thread_id;
+	struct timeval	start;
 	int				forks[2];
 	int				id;
 	int				iteration;
